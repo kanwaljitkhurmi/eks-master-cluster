@@ -10,6 +10,7 @@ phases:
       - sudo mv -v /tmp/eksctl /usr/local/bin
       - eksctl version
       - export PATH=$PWD/:$PATH
+      - apt-get update && apt-get -y install jq python3-pip python3-dev && pip3 install --upgrade awscli
   pre_build:
       commands:
         - export KUBECONFIG=$HOME/.kube/config
@@ -20,7 +21,7 @@ phases:
       - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
-      - eksctl create cluster --name=${EksClusterName} --nodes=3 --node-ami=auto --region=us-east-2
+      - eksctl create cluster --name=$EKS_CLUSTER_NAME --nodes=3 --node-ami=auto --region=us-east-2
       - printf '[{"name":"hello-k8s","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
       
 artifacts:
