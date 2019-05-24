@@ -22,7 +22,7 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
  
-      - eksctl create cluster --name=$EKS_CLUSTER_NAME --nodes=3 --node-ami=auto --region=us-east-2
+      - eksctl create cluster --name=$EKS_CLUSTER_NAME --nodes=3 --node-ami=auto --region=us-east-2 --nodes-min=2 --nodes-max=8
       - printf '[{"name":"hello-k8s","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
       
 artifacts:
